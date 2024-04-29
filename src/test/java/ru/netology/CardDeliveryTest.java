@@ -3,31 +3,29 @@ package ru.netology;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import java.awt.image.Kernel;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
+
+    DateCardDelivery date = new DateCardDelivery();
+
     @Test
     void shouldSubmittingForm() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
         $("button.button").click();
-        $(withText("Встреча успешно забронирована на")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id=notification]").shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id=notification]").shouldHave(
+                exactText("Успешно! Встреча успешно забронирована на " + date.creatingCorrectMeetingDate()));
     }
 
     @Test
@@ -35,11 +33,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Удмуртия");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -53,11 +47,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -71,11 +61,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(2);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingNotCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -103,11 +89,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -121,11 +103,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+711122233445");
         $("[data-test-id=agreement]").click();
@@ -139,11 +117,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("");
         $("[data-test-id=agreement]").click();
@@ -157,11 +131,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        LocalDate dateNow = LocalDate.now();
-        dateNow = dateNow.plusDays(3);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String meetingDate = dateFormatter.format(dateNow);
-        $("[data-test-id=date] input").setValue(meetingDate);
+        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("button.button").click();
