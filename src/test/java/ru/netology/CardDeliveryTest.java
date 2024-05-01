@@ -1,39 +1,45 @@
 package ru.netology;
 
+import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
-
-    DateCardDelivery date = new DateCardDelivery();
+    public String generateDate(long addDay, String pattern) {
+        return LocalDate.now().plusDays(addDay).format(DateTimeFormatter.ofPattern(pattern));
+    }
 
     @Test
     void shouldSubmittingForm() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
         $("button.button").click();
         $("[data-test-id=notification]").shouldBe(visible, Duration.ofSeconds(15));
         $("[data-test-id=notification]").shouldHave(
-                exactText("Успешно! Встреча успешно забронирована на " + date.creatingCorrectMeetingDate()));
+                Condition.exactText("Успешно! Встреча успешно забронирована на " + planingDate));
     }
 
     @Test
     void shouldCheckInvalidCity() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Удмуртия");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);;
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -46,8 +52,9 @@ public class CardDeliveryTest {
     void shouldCityFieldNotBeEmpty() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -60,8 +67,9 @@ public class CardDeliveryTest {
     void shouldCheckInvalidDate() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingNotCorrectMeetingDate());
+        String planingDate = generateDate(2, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -74,7 +82,7 @@ public class CardDeliveryTest {
     void shouldDateFieldNotBeEmpty() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
         $("[data-test-id=date] input").setValue("");
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
@@ -88,8 +96,9 @@ public class CardDeliveryTest {
     void shouldNameFieldNotBeEmpty() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("[data-test-id=agreement]").click();
@@ -102,8 +111,9 @@ public class CardDeliveryTest {
     void shouldCheckInvalidPhone() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+711122233445");
         $("[data-test-id=agreement]").click();
@@ -116,8 +126,9 @@ public class CardDeliveryTest {
     void shouldPhoneFieldNotBeEmpty() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("");
         $("[data-test-id=agreement]").click();
@@ -130,8 +141,9 @@ public class CardDeliveryTest {
     void shouldAgreementNotGiven() {
         open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.LEFT_SHIFT, Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date.creatingCorrectMeetingDate());
+        String planingDate = generateDate(4, "dd.MM.yyyy");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(planingDate);
         $("[data-test-id=name] input").setValue("Спиридонов Николай");
         $("[data-test-id=phone] input").setValue("+71112223344");
         $("button.button").click();
